@@ -36,21 +36,22 @@ export default function HomeScreen() {
     fetchData();
   }, []);
 
-  const reviews = ({ item }) => {
+  const reviews = (ratingValue) => {
+    console.log(ratingValue);
     const reviewTab = [];
-    const flatResult = item.review; // j'ai la note sur 5
-    const flatMaximalResult = 5 - flatResult; // j'ai la différence entre la note et 5
+    for (let i = 1; i <= 5; i++) {
+      if (i <= ratingValue) {
+        reviewTab.push(
+          <AntDesign name="star" size={24} color="black" key={i} />
+        );
+      } else {
+        reviewTab.push(
+          <AntDesign name="staro" size={24} color="black" key={i} />
+        );
+      }
+    }
 
-    reviewTab.push(
-      flatResult * <AntDesign name="star" size={24} color="black" />
-    );
-    reviewTab.push(
-      flatMaximalResult * <AntDesign name="staro" size={24} color="black" />
-    );
-    console.log(reviewTab);
-    return reviewTab.map((star) => {
-      return <View>{star}</View>;
-    });
+    return reviewTab;
   };
   return isLoading ? (
     <Text>En chargement</Text>
@@ -86,18 +87,14 @@ export default function HomeScreen() {
                   <View style={styles.reviewContent}>
                     <View style={styles.reviewStarsAndReviews}>
                       <View style={styles.reviewStars}>
-                        <AntDesign name="star" size={24} color="black" />
-                        <AntDesign name="staro" size={24} color="black" />
+                        {/* <AntDesign name="star" size={24} color="black" />
+                        <AntDesign name="staro" size={24} color="black" /> */}
+                        <Text>{reviews(item.ratingValue)}</Text>
                       </View>
                       <Text style={styles.ratingValue}>{item.ratingValue}</Text>
                     </View>
 
                     <Text style={styles.reviews}>{item.reviews}</Text>
-                    <View style={styles.reviews}>
-                      {(item) => {
-                        reviews(item);
-                      }}
-                    </View>
                   </View>
                 </View>
                 <View style={styles.flatContentRight}>
