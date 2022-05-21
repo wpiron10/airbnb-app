@@ -3,13 +3,17 @@ import {
   ImageBackground,
   Text,
   FlatList,
+  ActivityIndicator,
   ScrollView,
   View,
+  Button,
   Image,
   StyleSheet,
 } from "react-native";
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import { React } from "react";
+
+import { useState, useEffect } from "react";
 import { AntDesign } from "@expo/vector-icons";
 
 export default function HomeScreen() {
@@ -37,7 +41,7 @@ export default function HomeScreen() {
   }, []);
 
   const reviews = (ratingValue) => {
-    console.log(ratingValue);
+    // console.log(ratingValue);
     const reviewTab = [];
     for (let i = 1; i <= 5; i++) {
       if (i <= ratingValue) {
@@ -53,13 +57,15 @@ export default function HomeScreen() {
 
     return reviewTab;
   };
+
   return isLoading ? (
-    <Text>En chargement</Text>
+    <ActivityIndicator />
   ) : (
     <View style={styles.homeView}>
       <FlatList
         style={styles.flatCards}
         data={data}
+        keyExtractor={(elem) => elem._id}
         renderItem={({ item }) => {
           return (
             <View style={styles.flatCard}>
@@ -79,7 +85,7 @@ export default function HomeScreen() {
               </View>
               <View style={styles.flatContent}>
                 <View style={styles.flatContentLeft}>
-                  <View style={styles.flatContentTitle}>
+                  <View>
                     <Text style={styles.flatTitle} numberOfLines={1}>
                       {item.title}
                     </Text>
@@ -87,14 +93,11 @@ export default function HomeScreen() {
                   <View style={styles.reviewContent}>
                     <View style={styles.reviewStarsAndReviews}>
                       <View style={styles.reviewStars}>
-                        {/* <AntDesign name="star" size={24} color="black" />
-                        <AntDesign name="staro" size={24} color="black" /> */}
                         <Text>{reviews(item.ratingValue)}</Text>
                       </View>
-                      <Text style={styles.ratingValue}>{item.ratingValue}</Text>
                     </View>
 
-                    <Text style={styles.reviews}>{item.reviews}</Text>
+                    <Text style={styles.reviews}>{item.reviews} reviews</Text>
                   </View>
                 </View>
                 <View style={styles.flatContentRight}>
@@ -108,6 +111,13 @@ export default function HomeScreen() {
                   ></Image>
                 </View>
               </View>
+              <Button
+                title="See more Details"
+                color="#FF385C"
+                onPress={() =>
+                  navigation.navigate("RoomScreen", { id: item._id })
+                }
+              />
             </View>
           );
         }}
@@ -120,43 +130,38 @@ const styles = StyleSheet.create({
   homeView: { flex: 1 },
   flatCards: { flex: 1 },
   flatCard: {
-    borderColor: "green",
     marginBottom: "20%",
-    borderWidth: 5,
+
     height: 300,
     width: "100%",
   },
   flatContent: {
     flexDirection: "row",
     height: "20%",
+    marginBottom: 10,
   },
-  flatContentTitle: {
-    borderWidth: 5,
-    borderColor: "red",
-  },
+
   flatTitle: {
-    fontSize: 14,
+    fontSize: 17,
+    marginBottom: 10,
   },
 
   flatImageContent: {
     height: "80%",
     width: "100%",
-    borderWidth: 5,
-    borderColor: "yellow",
   },
   imageCard: {
     height: "100%",
     width: "100%",
   },
   flatContentLeft: {
-    borderColor: "blue",
     width: "80%",
-    borderWidth: 5,
+    marginLeft: 5,
   },
   priceContentCard: {
     height: 40,
     justifyContent: "center",
-    alignItems: "flex-center",
+    alignItems: "center",
     width: "20%",
     top: "50%",
     position: "absolute",
@@ -179,17 +184,19 @@ const styles = StyleSheet.create({
   },
   reviews: {
     color: "grey",
+    textAlign: "center",
+    textAlignVertical: "center",
+    marginLeft: 5,
   },
   flatContentRight: {
-    borderColor: "black",
     width: "20%",
-    borderWidth: 5,
+
     alignItems: "center",
     justifyContent: "center",
   },
   usernameImage: {
-    borderRadius: 50,
-    height: "100%",
+    height: 50,
     width: 50,
+    borderRadius: 25,
   },
 });

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -10,6 +11,11 @@ import SignInScreen from "./containers/SignInScreen";
 import SignUpScreen from "./containers/SignUpScreen";
 import SettingsScreen from "./containers/SettingsScreen";
 import SplashScreen from "./containers/SplashScreen";
+import RoomScreen from "./containers/RoomScreen";
+import AroundMeScreen from "./containers/AroundMeScreen";
+import Logo from "./components/Logo";
+import { Feather } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -83,13 +89,16 @@ export default function App() {
                   }}
                 >
                   {() => (
-                    <Stack.Navigator>
+                    <Stack.Navigator
+                      screenOptions={{
+                        headerTitle: () => <Logo />,
+                      }}
+                    >
                       <Stack.Screen
                         name="Home"
                         options={{
                           title: "My App",
-                          headerStyle: { backgroundColor: "red" },
-                          headerTitleStyle: { color: "white" },
+                          headerStyle: { backgroundColor: "white" },
                         }}
                       >
                         {() => <HomeScreen />}
@@ -103,31 +112,63 @@ export default function App() {
                       >
                         {() => <ProfileScreen />}
                       </Stack.Screen>
+                      <Stack.Screen
+                        name="RoomScreen"
+                        options={{ title: "Flat" }}
+                      >
+                        {() => <RoomScreen />}
+                      </Stack.Screen>
+                    </Stack.Navigator>
+                  )}
+                </Tab.Screen>
+                <Tab.Screen
+                  name="AroundMe"
+                  options={{
+                    tabBarLabel: "Around me",
+                    tabBarIcon: ({ color, size }) => (
+                      <Feather name="map-pin" size={size} color={color} />
+                    ),
+                  }}
+                >
+                  {() => (
+                    <Stack.Navigator
+                      screenOptions={{
+                        headerTitle: () => <Logo />,
+                      }}
+                    >
+                      <Stack.Screen
+                        name="AroundMeScreen"
+                        options={{
+                          title: "AroundMe",
+                        }}
+                      >
+                        {() => <AroundMeScreen setToken={setToken} />}
+                      </Stack.Screen>
                     </Stack.Navigator>
                   )}
                 </Tab.Screen>
                 <Tab.Screen
                   name="TabSettings"
                   options={{
-                    tabBarLabel: "Settings",
+                    tabBarLabel: "My profile",
                     tabBarIcon: ({ color, size }) => (
-                      <Ionicons
-                        name={"ios-options"}
-                        size={size}
-                        color={color}
-                      />
+                      <AntDesign name="user" size={size} color={color} />
                     ),
                   }}
                 >
                   {() => (
-                    <Stack.Navigator>
+                    <Stack.Navigator
+                      screenOptions={{
+                        headerTitle: () => <Logo />,
+                      }}
+                    >
                       <Stack.Screen
-                        name="Settings"
+                        name="My Profile"
                         options={{
-                          title: "Settings",
+                          title: "MyProfile",
                         }}
                       >
-                        {() => <SettingsScreen setToken={setToken} />}
+                        {() => <ProfileScreen setToken={setToken} />}
                       </Stack.Screen>
                     </Stack.Navigator>
                   )}

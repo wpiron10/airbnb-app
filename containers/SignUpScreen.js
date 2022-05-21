@@ -148,7 +148,7 @@ export default function SignUpScreen({ setToken }) {
                           confirmpassword: confirmpassword,
                         }
                       );
-                      console.log(response.data);
+                      // console.log(response.data);
                       setPasswordConfirmationOK(true);
                       setErrorMessage("");
                       const userToken = "secret-token";
